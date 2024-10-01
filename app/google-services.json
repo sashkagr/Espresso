@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "411899089587",
+    "project_id": "espresso-perfectapplication",
+    "storage_bucket": "espresso-perfectapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411899089587:android:3fe44b33fb6723b695d6c6",
+        "android_client_info": {
+          "package_name": "com.espresso.app.articles"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAylFKV6qvNA32aUgfCBnsDvHboU7ivOCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
