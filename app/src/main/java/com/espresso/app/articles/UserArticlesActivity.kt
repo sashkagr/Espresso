@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Switch
 import android.widget.TextView
@@ -40,6 +41,7 @@ class UserArticlesActivity : AppCompatActivity() {
         statusTextView = findViewById(R.id.editTextTextEmailAddress)
         userId = auth.currentUser?.uid ?: ""
         titlePage = findViewById(R.id.userNameTextView)
+        val cup: ImageButton = findViewById(R.id.imageButton6)
         ruSwitch = findViewById(R.id.switch1) // Инициализация после setContentView
 
         adapter = ArticleAdapter(this, mutableListOf())
@@ -49,7 +51,9 @@ class UserArticlesActivity : AppCompatActivity() {
         }
 
         fetchPublishedArticles(userId, statusTextView)
-
+        cup.setOnClickListener {
+            startActivity(Intent(this, ArticlesListActivity::class.java))
+        }
         ruSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 RU = true

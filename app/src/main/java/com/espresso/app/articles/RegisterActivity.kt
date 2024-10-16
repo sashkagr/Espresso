@@ -10,6 +10,8 @@ import android.widget.ProgressBar
 import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.espresso.app.articles.R
+import com.espresso.app.articles.UserProfileActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -18,46 +20,55 @@ import java.io.ByteArrayInputStream
 
 class RegisterActivity : AppCompatActivity() {
 
+    companion object {
+        init {
+            System.loadLibrary("native-lib")  // Библиотека C
+        }
+    }
+    external fun switchLanguageNative(ru: Boolean)
+    external fun getLocalizedStringNative(key: Int): String
+    external fun validateInputsNative(email: String, password: String, username: String, info: String): Boolean
+
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
     private var RU: Boolean = false  // Флаг для отслеживания языка
 
-    private fun validateInputs(email: String, password: String, username: String, info: String): Boolean {
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            if (RU) {
-                Toast.makeText(this, "Введите корректный email", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Enter a valid email", Toast.LENGTH_SHORT).show()
-            }
-            return false
-        }
-        if (password.length < 6) {
-            if (RU) {
-                Toast.makeText(this, "Пароль должен содержать как минимум 6 символов", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Password must be at least 6 characters long", Toast.LENGTH_SHORT).show()
-            }
-            return false
-        }
-        if (username.isEmpty()) {
-            if (RU) {
-                Toast.makeText(this, "Введите уникальный ник", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Enter a unique username", Toast.LENGTH_SHORT).show()
-            }
-            return false
-        }
-        if (info.isEmpty()) {
-            if (RU) {
-                Toast.makeText(this, "Введите информацию о себе", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Enter information about yourself", Toast.LENGTH_SHORT).show()
-            }
-            return false
-        }
-        return true
-    }
+//    private fun validateInputs(email: String, password: String, username: String, info: String): Boolean {
+//        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//            if (RU) {
+//                Toast.makeText(this, "Введите корректный email", Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(this, "Enter a valid email", Toast.LENGTH_SHORT).show()
+//            }
+//            return false
+//        }
+//        if (password.length < 6) {
+//            if (RU) {
+//                Toast.makeText(this, "Пароль должен содержать как минимум 6 символов", Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(this, "Password must be at least 6 characters long", Toast.LENGTH_SHORT).show()
+//            }
+//            return false
+//        }
+//        if (username.isEmpty()) {
+//            if (RU) {
+//                Toast.makeText(this, "Введите уникальный ник", Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(this, "Enter a unique username", Toast.LENGTH_SHORT).show()
+//            }
+//            return false
+//        }
+//        if (info.isEmpty()) {
+//            if (RU) {
+//                Toast.makeText(this, "Введите информацию о себе", Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(this, "Enter information about yourself", Toast.LENGTH_SHORT).show()
+//            }
+//            return false
+//        }
+//        return true
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,24 +86,53 @@ class RegisterActivity : AppCompatActivity() {
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         val languageSwitch: Switch = findViewById(R.id.switch1)
 
-        // Обработчик для переключателя языка
+//        languageSwitch.setOnCheckedChangeListener { _, isChecked ->
+//            if (isChecked) {
+//                RU = true
+//                emailEditText.hint = "Введите email:"
+//                passwordEditText.hint = "Введите пароль:"
+//                usernameEditText.hint = "Введите имя пользователя:"
+//                infoEditText.hint = "Введите информацию о себе:"
+//                registerButton.text = "ЗАРЕГИСТРИРОВАТЬСЯ"
+//            } else {
+//                RU = false
+//                emailEditText.hint = "Enter email:"
+//                passwordEditText.hint = "Enter password:"
+//                usernameEditText.hint = "Enter username:"
+//                infoEditText.hint = "Enter info about yourself:"
+//                registerButton.text = "SIGN UP"
+//            }
+//        }
+//
+//        registerButton.setOnClickListener {
+//            val email = emailEditText.text.toString()
+//            val password = passwordEditText.text.toString()
+//            val username = usernameEditText.text.toString()
+//            val info = infoEditText.text.toString()
+//
+//            if (validateInputs(email, password, username, info)) {
+//                progressBar.visibility = View.VISIBLE
+//                register(email, password, username, info, progressBar)
+//            }
+//        }
         languageSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                RU = true
-                emailEditText.hint = "Введите email:"
-                passwordEditText.hint = "Введите пароль:"
-                usernameEditText.hint = "Введите ник:"
-                infoEditText.hint = "Введите информацию о себе:"
-                registerButton.text = "ЗАРЕГИСТРИРОВАТЬСЯ"
-            } else {
-                RU = false
-                emailEditText.hint = "Enter email:"
-                passwordEditText.hint = "Enter password:"
-                usernameEditText.hint = "Enter username:"
-                infoEditText.hint = "Enter info about yourself:"
-                registerButton.text = "SIGN UP"
-            }
+            RU = isChecked
+            switchLanguageNative(RU)  // Переключаем язык в C
+
+            // Обновляем текстовые метки с использованием C-функции
+            emailEditText.hint = getLocalizedStringNative(0)
+            passwordEditText.hint = getLocalizedStringNative(1)
+            usernameEditText.hint = getLocalizedStringNative(2)
+            infoEditText.hint = getLocalizedStringNative(3)
+            registerButton.text = getLocalizedStringNative(4)
         }
+
+        // Устанавливаем текстовые метки при запуске
+        emailEditText.hint = getLocalizedStringNative(0)
+        passwordEditText.hint = getLocalizedStringNative(1)
+        usernameEditText.hint = getLocalizedStringNative(2)
+        infoEditText.hint = getLocalizedStringNative(3)
+        registerButton.text = getLocalizedStringNative(4)
 
         registerButton.setOnClickListener {
             val email = emailEditText.text.toString()
@@ -100,9 +140,16 @@ class RegisterActivity : AppCompatActivity() {
             val username = usernameEditText.text.toString()
             val info = infoEditText.text.toString()
 
-            if (validateInputs(email, password, username, info)) {
+            // Используем C-функцию для валидации данных
+            if (validateInputsNative(email, password, username, info)) {
                 progressBar.visibility = View.VISIBLE
                 register(email, password, username, info, progressBar)
+            } else {
+                Toast.makeText(
+                    this,
+                    if (RU) "Ошибка валидации данных" else "Input validation error",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -155,3 +202,4 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 }
+ 

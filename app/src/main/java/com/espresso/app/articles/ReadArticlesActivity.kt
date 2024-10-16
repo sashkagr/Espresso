@@ -1,7 +1,9 @@
 package com.espresso.app.articles
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -20,17 +22,17 @@ class ReadArticlesActivity : AppCompatActivity() {
 
         private lateinit var storage: FirebaseStorage
         private lateinit var articleRef: StorageReference
+        private var articleUrl: String? = null
         private lateinit var auth: FirebaseAuth
         private lateinit var titleText: TextView
         private lateinit var contentText: TextView
         private lateinit var saveButton: Button
         private lateinit var deleteButton: Button
         private lateinit var switchRu: Switch
-        private var articleUrl: String? = null
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_read_article)
-
+            var RU = false
             switchRu = findViewById(R.id.switch1)
             storage = FirebaseStorage.getInstance()
             auth = FirebaseAuth.getInstance()
@@ -73,24 +75,43 @@ class ReadArticlesActivity : AppCompatActivity() {
                     Toast.makeText(this, "Error loading article", Toast.LENGTH_SHORT).show()
                 }
             }
+            switchRu.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    RU = true
+                    saveButton.text = "ИЗМЕНИТЬ"
+                    deleteButton.text = "УДАЛИТЬ"
 
-//            saveButton.setOnClickListener {
-//                val title = titleEditText.text.toString()
-//                val content = contentEditText.text.toString()
-//
-//                if (articleUrl != null && title.isNotEmpty() && content.isNotEmpty()) {
-//                    val updatedArticleRef = storage.getReferenceFromUrl(articleUrl!!)
-//                    updatedArticleRef.putBytes(content.toByteArray())
-//                        .addOnSuccessListener {
-//                            Toast.makeText(this, "Article updated successfully", Toast.LENGTH_SHORT).show()
-//                            finish()
-//                        }
-//                        .addOnFailureListener {
-//                            Toast.makeText(this, "Error updating article", Toast.LENGTH_SHORT).show()
-//                        }
-//                } else {
-//                    Toast.makeText(this, "Please enter a title and content", Toast.LENGTH_SHORT).show()
-//                }
-//            }
+                } else {
+                    RU = false
+                    saveButton.text = "EDIT"
+                    deleteButton.text = "DELETE"
+
+                }
+            }
+            saveButton.setOnClickListener {
+                val intent = Intent(this, EditArticleActivity::class.java).apply {
+                    putExtra("ARTICLE_URL", articleUrl.toString())
+                }
+                startActivity(intent)
+            }
+            deleteButton.setOnClickListener{
+                val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(articleUrl.toString())
+
+                // Удаляем статью
+                storageRef.delete()
+                    .addOnSuccessListener {
+                        // Успешное удаление
+                        Toast.makeText(this, if (RU) "Статья удалена" else "Article deleted", Toast.LENGTH_SHORT).show()
+
+                        // Возвращаемся на предыдущий экран (или на другой экран по вашему выбору)
+                        startActivity(Intent(this, UserProfileActivity::class.java))
+                        finish()
+                    }
+                    .addOnFailureListener { exception ->
+                        // Обработка ошибок при удалении
+                        Log.e("DeleteArticle", "Ошибка при удалении статьи: ${exception.message}")
+                        Toast.makeText(this, if (RU) "Ошибка при удалении статьи: ${exception.message}" else "Error deleting article: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
     }

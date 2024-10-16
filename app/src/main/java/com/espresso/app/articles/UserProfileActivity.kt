@@ -7,6 +7,7 @@ import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Switch
 import android.widget.TextView
@@ -41,6 +42,7 @@ class UserProfileActivity : AppCompatActivity() {
         val articlesListButton: Button = findViewById(R.id.articlesListButton)
         val editTextTextEmailAddress: TextView = findViewById(R.id.editTextTextEmailAddress)
         val statusTextView: TextView = findViewById(R.id.statusText)
+        val cup: ImageButton = findViewById(R.id.imageButton6)
         val textView = findViewById<TextView>(R.id.editTextTextEmailAddress)
         textView.movementMethod = ScrollingMovementMethod()
         val textView1 = findViewById<TextView>(R.id.userNameTextView)
@@ -124,6 +126,9 @@ class UserProfileActivity : AppCompatActivity() {
                 }
             }
 
+            cup.setOnClickListener {
+                startActivity(Intent(this, ArticlesListActivity::class.java))
+            }
             writeArticleButton.setOnClickListener {
                 startActivity(Intent(this, WriteArticleActivity::class.java))
             }

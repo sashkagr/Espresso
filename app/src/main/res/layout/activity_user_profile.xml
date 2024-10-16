@@ -15,45 +15,48 @@
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statusText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp" />
 
     <TextView
         android:id="@+id/userNameTextView"
-        android:layout_width="187dp"
+        android:layout_width="wrap_content"
         android:layout_height="61dp"
         android:layout_marginTop="8dp"
+        android:layout_marginLeft="2dp"
+
         android:foregroundTint="#FFFFFF"
+        android:overScrollMode="ifContentScrolls"
+        android:scrollbars="vertical"
         android:text="User Name"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:scrollbars="vertical"
-        android:overScrollMode="ifContentScrolls"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/writeArticleButton"
-        android:background="#32100404"
-        android:layout_width="175dp"
+        android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginTop="24dp"
+        android:background="#32100404"
         android:text="Write Article"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/articlesListButton"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.5"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
 
     <Button
         android:id="@+id/articlesListButton"
-        android:layout_width="175dp"
+        android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginTop="24dp"
         android:background="#32100404"
@@ -63,22 +66,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.5"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
 
     <TextView
         android:id="@+id/editTextTextEmailAddress"
-        android:layout_width="189dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_marginTop="1dp"
+        android:layout_marginLeft="1dp"
+
         android:ems="10"
+        android:scrollbars="vertical"
         android:textAlignment="viewStart"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:textStyle="bold|italic"
-        android:scrollbars="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userNameTextView"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="-1dp" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/statusText"
@@ -116,19 +123,20 @@
 
     <ImageButton
         android:id="@+id/imageButton4"
-        android:layout_width="175dp"
+        android:layout_width="0dp"
         android:layout_height="41dp"
         android:layout_marginEnd="1dp"
         android:background="#2C0404"
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageButton6"
         app:srcCompat="@drawable/baseline_house" />
 
     <ImageButton
         android:id="@+id/imageButton6"
-        android:layout_width="175dp"
+        android:layout_width="0dp"
         android:layout_height="41dp"
         android:layout_marginBottom="2dp"
         android:background="#32100404"
@@ -137,6 +145,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.5"
         app:srcCompat="@drawable/baseline_free_breakfast" />
 
 

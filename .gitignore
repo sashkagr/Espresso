@@ -12,4 +12,19 @@
 /captures
 .externalNativeBuild
 .cxx
+.idea
+.gradle
+8531927.png
+8531955.png
+8531970.png
+coffee.png
+coffee (1).png
+coffee (3).png
+coffee (2).png
+coffee (4).png
+coffee (5).png
+gradle.properties
+gradlew.bat
+settings.gradle.kts
 local.properties
+gradlew
